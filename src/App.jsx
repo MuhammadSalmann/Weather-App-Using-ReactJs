@@ -7,6 +7,7 @@ import { Todo } from './todo/Todo';
 import Form from './forms/Form';
 import Joke from './useEffect/Joke';
 import WeatherApp from './WeatherApp/WeatherApp';
+import Card from './tailwind/Card';
 
 export const App = () => {
     return (
