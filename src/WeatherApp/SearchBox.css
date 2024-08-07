@@ -1,0 +1,8 @@
+.SearchBox {
+    text-align: center;
+}
+
+.SearchBox h1 {
+    font-size: 2em;
+    -webkit-text-stroke: 1px rgba(0, 68, 255, 0.683);
+}
