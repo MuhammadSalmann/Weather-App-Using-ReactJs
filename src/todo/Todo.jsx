@@ -5,21 +5,19 @@ import React from "react";
 export const Todo = () => {
   let [todos, setTodos] = useState([]);
   let [newtask, setNewTask] = useState("");
+  let [isEdit, setIsEdit] = useState({});
 
-  const handleChange = (e) => {
-    console.log(e.target.value);
-    setNewTask(e.target.value);
-  };
+  const handleChange = e => setNewTask(e.target.value);
 
   const addTask = () => {
     newtask.length > 0
       ? setTodos([...todos, { id: uuidv4(), task: newtask, isDone: false }])
       : alert("Please Enter Task");
     setNewTask("");
+
   };
 
-  const DeleteTask = (id) =>
-    setTodos((prevTasks) => prevTasks.filter((task) => task.id !== id));
+  const DeleteTask = (id) => setTodos((prevTasks) => prevTasks.filter((task) => task.id !== id));
 
   const UpperCaseAll = () => {
     setTodos((prevTodos) =>
@@ -57,6 +55,15 @@ export const Todo = () => {
       }))
     );
 
+  const UpdateTask = ({ id, task: editedTask }) => {
+    setTodos((prevTodos) =>
+      prevTodos.map((prevTasks) =>
+        prevTasks.id === id ? { ...prevTasks, task: editedTask } : prevTasks
+      )
+    );
+    setIsEdit({});
+  }
+
   return (
     <>
       <div className="cont">
@@ -73,12 +80,15 @@ export const Todo = () => {
       <ul>
         {todos.map((todo, index) => {
           return (
-            <>
-              <br />
-              <li key={todo.id}>
-                <span
-                  style={todo.isDone ? { textDecoration: "line-through" } : {}}
-                >
+            <li key={todo.id}>
+            <br />
+            {isEdit.id === todo.id ? 
+              <>
+                <input type="text" value={isEdit.task} onChange={e => setIsEdit({ ...isEdit, task: e.target.value })} />
+                <button onClick={() => UpdateTask(isEdit)}>Save Task</button>
+              </> :
+              <>
+                <span style={todo.isDone ? { textDecoration: "line-through" } : {}} >
                   {todo.task.length > 0 ? `${index + 1}. ${todo.task}` : ""}
                 </span>
                 &nbsp; &nbsp; &nbsp;
@@ -89,8 +99,11 @@ export const Todo = () => {
                 </button>
                 &nbsp; &nbsp; &nbsp;
                 <button onClick={() => DoneTask(todo.id)}>Mark As Done</button>
-              </li>
+                &nbsp; &nbsp; &nbsp;
+                <button onClick={() => setIsEdit({id: todo.id, task: todo.task})}>Edit Task</button>
             </>
+            }
+            </li>
           );
         })}
       </ul>
